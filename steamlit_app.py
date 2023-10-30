@@ -43,7 +43,7 @@ try:
 except URLERROR as e:
   streamlit.error()
     
-streamlit.write('The user entered ', fruit_choice)
+#streamlit.write('The user entered ', fruit_choice)
 
 #new section to display API response
 
@@ -61,21 +61,23 @@ def get_fruit_load_list():
 
 #Add a button to load the fruit
 
+def insert_row_snowflake(new_fruit):
+    with my cnx.cursor() as my_cur:
+    my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+    return 'Thanks for adding ' + "New Fruit"
+
+add_my_fruit = streamlit.text_input('What fruit would you like information about?')
 if streamlit.button('Get Fruit Load List'):
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    my_data_rows=get_fruit_load_list()
-    streamlit.dataframe(my_data_rows)
+    back_from_function=insert_row_snowflake(add_my_fruit)
+    streamlit.text(back_from_function)
+
+#streamlit.text("The fruit load list contains:")
+#streamlit.dataframe(my_data_row)
 
 streamlit.stop()
 
-    
 
-streamlit.text("The fruit load list contains:")
-streamlit.dataframe(my_data_row)
 
-fruit_choice = streamlit.text_input('What fruit would you like information about?','jackfruit')
-streamlit.write('Thanks for adding ', fruit_choice)
-
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
 
 
